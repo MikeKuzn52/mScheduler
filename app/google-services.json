@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "209204927689",
+    "firebase_url": "https://mscheduler-7d380-default-rtdb.firebaseio.com",
+    "project_id": "mscheduler-7d380",
+    "storage_bucket": "mscheduler-7d380.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209204927689:android:d9d694bb73314fb734c118",
+        "android_client_info": {
+          "package_name": "com.mikekuzn.mscheduler"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-jFAdOWQw4irbjwRrqrPxWO2HcU-RhAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

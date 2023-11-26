@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Планировщик</string>
+    <string name="title">Заголовок</string>
+    <string name="description">Описание</string>
+    <string name="editBack">Заметка/задача</string>
+    <string name="nullTaskEdit">Внутренняя ошибка. Попытка редактировать отсутствующую задачу</string>
+    <string name="repeatEvent">Повторы:</string>
+    <string name="noAnyTasks">Тут будут ваши заметки и задачи</string>
+    <string name="dataFormat">yyyy.MM.dd</string>
+    <string name="dataShortFormat">yy.MM.dd</string>
+    <string name="timeFormat">HH:mm</string>
+    <string name="title_activity_alarm">СобытиеПланировщика</string>
+    <string name="alarmEvent">СОБЫТИЕ</string>
+    <string name="finishEvent">Выполнено</string>
+    <string name="postponeEvent">Отложить действие</string>
+    <string name="enterEmail">Введите Email</string>
+    <string name="enterPass">Введите пароль</string>
+    <string name="showPass">Показать пароль</string>
+    <string name="signIn">Войти</string>
+    <string name="signUp">Зарегистрироваться</string>
+    <string name="signOut">Выйти</string>
+    <string name="sendMailToConfirm">Послать сообщения для подтверждения</string>
+    <string name="incorrectEmail">Неверный Email</string>
+    <string name="incorrectPass">Пароль корче 5 символов</string>
+    <string name="signUpSuccessful">Регистрация выполнена успешно</string>
+    <string name="signUpError">Ошибка регистрации</string>
+    <string name="signInSuccessful">Вход выполнен успешно</string>
+    <string name="signInError">Ошибка входа</string>
+    <string name="sendEmailError">Error sending the email</string>
+    <string name="signOutTitle">Вы уверены, что хотите выйти</string>
+    <string name="signOutCancel">Отмена</string>
+    <string name="signOutConfirm">Выйти</string>
+</resources>

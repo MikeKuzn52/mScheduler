@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">mScheduler</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="editBack">Note/Task</string>
+    <string name="nullTaskEdit">Internal error. Attempt to edit a absent task</string>
+    <string name="repeatEvent">Repeat:</string>
+    <string name="noAnyTasks">Here will be your notes and tasks</string>
+    <string name="dataFormat">yyyy.MM.dd</string>
+    <string name="dataShortFormat">yy.MM.dd</string>
+    <string name="timeFormat">HH:mm</string>
+    <string name="title_activity_alarm">SchedulerAlarm</string>
+    <string name="alarmEvent">ALARM</string>
+    <string name="finishEvent">Ready</string>
+    <string name="postponeEvent">Postpone the event</string>
+    <string name="enterEmail">Enter Email</string>
+    <string name="enterPass">Enter Password</string>
+    <string name="showPass">Show password</string>
+    <string name="signIn">Sign In</string>
+    <string name="signUp">Sign Up</string>
+    <string name="signOut">SignOut</string>
+    <string name="sendMailToConfirm">Send Mail to confirm</string>
+    <string name="incorrectEmail">Incorrect Email</string>
+    <string name="incorrectPass">The password is shorter than 5 characters</string>
+    <string name="signUpSuccessful">Sign Up successful</string>
+    <string name="signUpError">Sign Up error</string>
+    <string name="signInSuccessful">Sign In successful</string>
+    <string name="signInError">Sign In error</string>
+    <string name="sendEmailError">Error sending the email</string>
+    <string name="signOutTitle">Are you sure that you want to log out</string>
+    <string name="signOutCancel">Cancel</string>
+    <string name="signOutConfirm">Log out</string>
+</resources>

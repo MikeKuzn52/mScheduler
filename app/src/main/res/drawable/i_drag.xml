@@ -1,0 +1,5 @@
+<vector android:height="@dimen/dragImageHeight" android:tint="@color/dragInductor"
+    android:viewportHeight="52" android:viewportWidth="22"
+    android:width="@dimen/dragImageWidth" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="@android:color/white" android:pathData="m4.858049,4c2.2,0 4,1.8 4,4s-1.8,4 -4,4s-4,-1.8 -4,-4s1.8,-4 4,-4zm12,0c2.2,0 4,1.8 4,4s-1.8,4 -4,4s-4,-1.8 -4,-4s1.8,-4 4,-4zm-12,12c2.2,0 4,1.8 4,4s-1.8,4 -4,4s-4,-1.8 -4,-4s1.8,-4 4,-4zm12,0c2.2,0 4,1.8 4,4s-1.8,4 -4,4s-4,-1.8 -4,-4s1.8,-4 4,-4zm-12,12c2.2,0 4,1.8 4,4s-1.8,4 -4,4s-4,-1.8 -4,-4s1.8,-4 4,-4zm12,0c2.2,0 4,1.8 4,4s-1.8,4 -4,4s-4,-1.8 -4,-4s1.8,-4 4,-4zm-12,12c2.2,0 4,1.8 4,4s-1.8,4 -4,4s-4,-1.8 -4,-4s1.8,-4 4,-4zm12,0c2.2,0 4,1.8 4,4s-1.8,4 -4,4s-4,-1.8 -4,-4s1.8,-4 4,-4z"/>
+</vector>
