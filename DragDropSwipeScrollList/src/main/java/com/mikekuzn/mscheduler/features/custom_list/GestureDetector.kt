@@ -1,4 +1,4 @@
-package com.mikekuzn.mscheduler.features.taskList.draganddroplist
+package com.mikekuzn.mscheduler.features.custom_list
 
 import androidx.compose.foundation.gestures.awaitDragOrCancellation
 import androidx.compose.foundation.gestures.awaitEachGesture

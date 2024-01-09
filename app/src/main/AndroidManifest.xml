@@ -15,11 +15,6 @@
         android:theme="@style/Theme.MScheduler"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.AlarmActivity"
-            android:exported="false"
-            android:label="@string/title_activity_alarm"
-            android:theme="@style/Theme.MScheduler" />
-        <activity
             android:name=".presentation.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.MScheduler">
@@ -29,6 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".presentation.AlarmActivity"
+            android:exported="false"
+            android:label="@string/title_activity_alarm"
+            android:theme="@style/Theme.MScheduler" />
     </application>
 
 </manifest>

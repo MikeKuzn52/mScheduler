@@ -1,4 +1,4 @@
-package com.mikekuzn.mscheduler.features.taskList.draganddroplist
+package com.mikekuzn.mscheduler.features.custom_list
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -15,13 +15,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.mikekuzn.mscheduler.R
 import kotlinx.coroutines.Job
 
 @Composable
@@ -34,7 +34,8 @@ fun <T> DragDropSwipeScrollList(
     scrollBarPadding: Dp = 2.dp,
     dragInductor: (@Composable (item: T, swipeState: SwipeState, modifier: Modifier) -> Unit)? = null,
     indicatorContent: (@Composable (index: Int, maxIndex: Int, isThumbSelected: Boolean) -> Unit)? = null,
-    showItem: @Composable (T) -> Unit
+    divider: @Composable () -> Unit = { Divider(color = Color.Gray) },
+    showItem: @Composable (T) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val overScrollJob = remember { mutableStateOf<Job?>(null) }
@@ -103,9 +104,9 @@ fun <T> DragDropSwipeScrollList(
 
                     if (dragInductor != null) {
                         dragInductor(
-                            item = item,
-                            swipeState = swipeState,
-                            modifier = Modifier
+                            item,
+                            swipeState,
+                            Modifier
                                 .onGloballyPositioned { coordinates ->
                                     indicatorEnd = coordinates.size.width.toFloat()
                                 },
@@ -113,7 +114,7 @@ fun <T> DragDropSwipeScrollList(
                     }
                     showItem(item)
                 }
-                Divider(color = colorResource(id = R.color.defaultHint))
+                divider()
             }
         }
     }

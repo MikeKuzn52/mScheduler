@@ -5,7 +5,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.mikekuzn.mscheduler.features.alarmManager.CustomAlarmManagerInter
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.mikekuzn.mscheduler.alarmmanager.CustomAlarmManagerInter
 import com.mikekuzn.mscheduler.domain.entities.Task
 import java.util.Calendar
 import javax.inject.Inject
@@ -14,7 +15,7 @@ import kotlin.math.min
 class UseCases @Inject constructor(
     private val alarmManager: CustomAlarmManagerInter,
     private val getCurrentTime: GetCurrentTime,
-    private val repository: RepositoryInter
+    private val repository: RepositoryInter,
 ) : UseCasesInter {
 
     private val taskListM = mutableStateListOf<Task>()
@@ -23,11 +24,19 @@ class UseCases @Inject constructor(
 
     override fun setUserPath(userPath: String) {
         Log.d("***[", "setUserPath $userPath")
-        if (this.savedUserPath != userPath) {
-            this.savedUserPath = userPath
+        if (savedUserPath != userPath) {
+            savedUserPath?.run { throw Exception("Internal error. Add UserPath") }
+            savedUserPath = userPath
+            // TODO change subscribe(...) { taskArray[] ->
+            //  and remove tasks which key was not found
             repository.subscribe(userPath) { newTask ->
-                taskTimeProse(newTask)
-                taskListM.add(newTask)
+                taskListM.find { it.key == newTask.key }?.let {
+                    // TODO check hash sum and change
+                } ?: run {
+                    taskTimeProcess(newTask)
+                    taskListM.add(newTask)
+
+                }
             }
         }
     }
@@ -38,28 +47,52 @@ class UseCases @Inject constructor(
         taskListM.clear()
     }
 
-    override fun getTaskList(): List<Task> = taskListM
+    override fun getTaskList(): SnapshotStateList<Task> = taskListM
 
     override fun swap(from: Int, to: Int) {
         if (from == to) return
+        // swap key values to swap on firebase
+        taskListM[to].key = taskListM[from].key.also { taskListM[from].key = taskListM[to].key }
+        modifyTask(to)
+        modifyTask(from)
+        // swap on local array
         taskListM.add(to, taskListM.removeAt(from))
     }
 
     // Add form UI
     override fun addTask(newTask: Task) {
-        taskTimeProse(newTask)
-        newTask.key = repository.getNextKey()
-        taskListM.add(newTask)
-        if (!repository.add(newTask)) {
-            newTask.key = null
+        taskTimeProcess(newTask)
+        // if newTask.key == null it is local task
+        newTask.key ?: let {
+            val newKey = repository.add(newTask)
+            Log.d("***[", "addTask key='${newTask.key}->$newKey")
+            newTask.key = newKey
+            if (newKey.isNullOrEmpty()) {
+                // TODO newKey == null -> Toast or anything also and repeat to write
+            }
+            else if (!taskListM.any{ it.key == newKey }) {
+                taskListM.add(newTask)
+            }
         }
     }
 
     override fun deleteTask(index: Int) {
-        TODO("Not yet implemented")
+        // TODO("make suspend")
+        repository.delete(taskListM[index].key)
+        taskListM.removeAt(index)
     }
 
-    private fun taskTimeProse(newTask: Task) {
+    override fun modifyTask(index: Int) {
+        if (taskListM[index].key.isNullOrEmpty()) {
+            Log.e("***[", "modifyTask N$index key='${taskListM[index].key}")
+            // TODO Toast or anything also
+            return
+        }
+        // TODO("make suspend")
+        repository.modify(taskListM[index].key!!, taskListM[index])
+    }
+
+    private fun taskTimeProcess(newTask: Task) {
         val systemDataTime = getCurrentTime.execute()
         val newDataTime = getNext(newTask, systemDataTime)
         if (newDataTime != Long.MAX_VALUE && next.second > newDataTime) {
@@ -110,14 +143,15 @@ class UseCases @Inject constructor(
             }
         }
         return minDataTime
+
     }
 }
 
-fun Task.timeForeach(pros: (currentDataTime: Long) -> Unit) {
-    // TODO not yet implemented Repeat. not Once
+fun Task.timeForeach(handle: (currentDataTime: Long) -> Unit) {
+    // TODO not yet implemented Repeat (not only Once)
     for (before in minutesBefore) {
         val currentDataTime = dataTime - before * 1000
-        pros(currentDataTime)
+        handle(currentDataTime)
     }
 }
 

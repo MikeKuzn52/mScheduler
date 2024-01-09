@@ -1,6 +1,5 @@
 package com.mikekuzn.mscheduler.features.taskList
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.mikekuzn.mscheduler.domain.UseCasesInter
@@ -14,21 +13,11 @@ class TaskListViewModel @Inject constructor(
     private val useCases: UseCasesInter,
 ) : ViewModel(), TaskListViewModelInter {
 
-    private var tmp = mutableStateListOf<Task>()
-
-    init {
-        for(i in 1..30) {
-            tmp.add(Task("","Task $i"))
-        }
-    }
-
     override val taskList
-        get() = tmp//useCases.getTaskList()
+        get() = useCases.getTaskList()
 
     override fun swap(from: Int, to: Int) {
-        //useCases.swap(from, to)
-        tmp.add(to, tmp.removeAt(from))
-
+        useCases.swap(from, to)
     }
 
     override fun addTask(newTask: Task) {
@@ -40,8 +29,7 @@ class TaskListViewModel @Inject constructor(
     }
 
     override fun deleteTask(index: Int) {
-        //useCases.deleteTask(index)
-        tmp.removeAt(index)
+        useCases.deleteTask(index)
     }
 
     override val isSigned get() = useCases.isSigned

@@ -3,7 +3,6 @@ package com.mikekuzn.mscheduler.data
 import androidx.compose.ui.graphics.Color
 
 data class TaskData(
-    val key: String? = null,
     val title: String = "",
     val description: String = "",
     val childCount: Int = 0,// TODO not yet implemented
@@ -17,4 +16,6 @@ data class TaskData(
     val check: Boolean = false,
     val isSystemMelody: Boolean = true,
     //al melody: Uri? = null,// TODO not yet implemented
-)
+) {
+    constructor() : this("")
+}

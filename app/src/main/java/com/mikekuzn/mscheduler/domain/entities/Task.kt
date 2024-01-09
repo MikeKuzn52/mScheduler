@@ -5,7 +5,6 @@ import androidx.compose.ui.graphics.Color
 import java.util.Calendar
 
 data class Task(
-    var key: String? = null,
     val title: String = "",
     val description: String = "",
     val childCount: Int = 0,// TODO not yet implemented
@@ -19,4 +18,6 @@ data class Task(
     val check: Boolean = false,
     val isSystemMelody: Boolean = true,
     val melody: Uri? = null,// TODO not yet implemented
-)
+) {
+    var key: String? = null
+}

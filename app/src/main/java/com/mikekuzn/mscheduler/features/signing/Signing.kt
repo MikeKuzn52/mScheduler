@@ -93,9 +93,7 @@ class Signing @Inject constructor(
         isEmailVerified = currentUser?.isEmailVerified ?: false
         Log.d("***[", "readState $currentUser $isEmailVerified")
         if (!oldState && signed && isEmailVerified) {
-            val addString = currentUser!!.email!!
-                .replace("@", "_")
-                .replace(".", "_")
+            val addString = currentUser!!.uid
             useCases.setUserPath(addString)
         }
     }

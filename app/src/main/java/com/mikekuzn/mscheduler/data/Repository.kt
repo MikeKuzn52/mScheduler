@@ -7,13 +7,13 @@ import javax.inject.Inject
 class Repository @Inject constructor(
     private val dBFactory: FirebaseDBFactory
 ) : RepositoryInter {
-    var db: FirebaseDB? = null
+    private var db: FirebaseDB? = null
 
     override fun subscribe(userPath: String, add: (task: Task) -> Unit) {
         db = dBFactory.create(userPath)
-        /*db!!.subscribe { taskData: TaskData ->
-            add(taskData.toTask())
-        } // */
+        db!!.subscribe { key: String, taskData: TaskData ->
+            add(taskData.toTask(key))
+        }
     }
 
     override fun unsubscribe() {
@@ -21,13 +21,27 @@ class Repository @Inject constructor(
         db = null
     }
 
-    override fun add(task: Task) = db?.add(task.toTaskData()) ?: false
+    override fun add(task: Task) = db?.add(task.toTaskData())
 
-    override fun getNextKey() = db?.getNextKey()
+    override fun delete(key: String?): Boolean {
+        // TODO("make suspend")
+        if (!key.isNullOrEmpty()) {
+            db?.delete(key)
+            return true
+        }
+        return false
+    }
 
+    override fun modify(key: String, task: Task): Boolean {
+        // TODO("make suspend")
+        if (db != null && !key.isNullOrEmpty()) {
+            db!!.modify(key, task.toTaskData())
+            return true
+        }
+        return false
+    }
 
-    private fun TaskData.toTask() = Task(
-        key = key,
+    private fun TaskData.toTask(key: String) = Task(
         title = title,
         description = description,
         childCount = childCount,
@@ -41,10 +55,9 @@ class Repository @Inject constructor(
         check = check,
         isSystemMelody = isSystemMelody,
         // TODO melody = melody,
-    )
+    ).apply { this.key = key }
 
     private fun Task.toTaskData() = TaskData(
-        key = key,
         title = title,
         description = description,
         childCount = childCount,

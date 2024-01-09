@@ -14,12 +14,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -31,8 +33,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.mikekuzn.mscheduler.R
 import com.mikekuzn.mscheduler.domain.entities.Repeat
 import com.mikekuzn.mscheduler.domain.entities.Task
-import com.mikekuzn.mscheduler.features.taskList.draganddroplist.DragDropSwipeScrollList
-import com.mikekuzn.mscheduler.features.taskList.draganddroplist.SwipeState
+import com.mikekuzn.mscheduler.features.custom_list.DragDropSwipeScrollList
+import com.mikekuzn.mscheduler.features.custom_list.SwipeState
 import java.text.SimpleDateFormat
 
 @Composable
@@ -52,14 +54,20 @@ fun TaskListUI(
         DragDropSwipeScrollList(
             mItems = vm.taskList,
             onSwap = { from, to -> vm.swap(from, to) },
-            onTree = { index -> vm.setAsSubTask(index)},
-            onDelete = { index -> vm.deleteTask(index)},
+            onTree = { index -> vm.setAsSubTask(index) },
+            onDelete = { index -> vm.deleteTask(index) },
             modifier = modifier.fillMaxSize(1F),
             showItem = TaskUI,
             indicatorContent = ScrollIndicator,
+            divider = divider,
             dragInductor = DragInductor,
         )
     }
+}
+
+
+private val divider: @Composable () -> Unit = {
+    Divider(color = colorResource(id = R.color.defaultHint))
 }
 
 private val DragInductor: @Composable (task: Task, swipeState: SwipeState, modifier: Modifier) -> Unit =
@@ -144,13 +152,13 @@ val TaskUI: @Composable (task: Task) -> Unit = { task ->
                         text = SimpleDateFormat(stringResource(id = R.string.dataShortFormat))
                             .format(task.dataTime),
                         overflow = TextOverflow.Ellipsis,
-                        fontSize = dimensionResource(R.dimen.normalFontSize).value.sp,
+                        fontSize = dimensionResource(R.dimen.miniFontSize).value.sp,
                     )
                     Text(
                         text = SimpleDateFormat(stringResource(id = R.string.timeFormat))
                             .format(task.dataTime),
                         overflow = TextOverflow.Ellipsis,
-                        fontSize = dimensionResource(R.dimen.normalFontSize).value.sp,
+                        fontSize = dimensionResource(R.dimen.miniFontSize).value.sp,
                     )
                 }
             }

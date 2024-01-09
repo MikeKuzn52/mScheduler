@@ -1,4 +1,4 @@
-package com.mikekuzn.mscheduler.features.taskList.draganddroplist
+package com.mikekuzn.mscheduler.features.custom_list
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -274,9 +274,9 @@ fun LazyColumnScrollbar(
                             .testTag(TestTagsScrollbar.scrollbarIndicator),
                     ) {
                         indicatorContent(
-                            index = firstVisibleItemIndex.value,
-                            maxIndex = totalItemsCount(),
-                            isThumbSelected = isSelected
+                            firstVisibleItemIndex.value,
+                            totalItemsCount(),
+                            isSelected
                         )
                     }
                 }

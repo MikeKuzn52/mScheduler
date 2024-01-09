@@ -1,5 +1,15 @@
 package com.mikekuzn.mscheduler.data
 
+/* Firebase rules:
+{
+  "rules": {
+    "$uid": {
+     ".read": "auth != null",
+     ".write": "auth != null && auth.uid === $uid",
+    }
+  }
+}*/
+
 import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,15 +33,23 @@ class FirebaseDB @AssistedInject constructor(
         dbRef = FirebaseDatabase.getInstance().getReference(userPath)
     }
 
-    fun subscribe(add: (task: TaskData) -> Unit) {
+    fun subscribe(add: (key: String, task: TaskData) -> Unit) {
         listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                Log.d("***[", "onDataChange count=${snapshot.children.count()}")
                 for (data in snapshot.children) {
-                    val taskData: TaskData? = data.getValue<TaskData>()
-                    Log.d("***[", "onDataChange taskData=$taskData")
-                    taskData?.let { add(it) }
+                    try {
+                        val key: String = data.key ?: continue
+                        val taskData: TaskData? = data.getValue<TaskData>()
+                        Log.d("***[", "onDataChange key=$key taskData=$taskData")
+                        add(key, taskData!!)
+                    } catch (e: Exception) {
+                        Log.e("***[", "onDataChange error and remove ${e.message} children=$data")
+                        dbRef.child(data.key!!).removeValue()
+                    }
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 // TODO("Not yet implemented")
             }
@@ -39,16 +57,27 @@ class FirebaseDB @AssistedInject constructor(
         dbRef.addValueEventListener(listener!!)
     }
 
-    fun add(taskData: TaskData): Boolean {
-        dbRef.push().setValue(taskData)
-        Log.d("***[", "onDataChange taskData=$taskData")
-        return true
-    }
-
-    fun getNextKey() = dbRef.key
-
     fun unsubscribe() {
         listener?.let { dbRef.removeEventListener(it) }
+    }
+
+    fun add(taskData: TaskData): String? {
+        dbRef.push().apply {
+            Log.d("***[", "add taskData=$taskData")
+            // TODO("make suspend  setValue(taskData, CompletionListener listener)")
+            setValue(taskData)
+            return key
+        }
+    }
+
+    fun delete(key: String) {
+        // TODO("make suspend  removeValue(CompletionListener listener)")
+        dbRef.child(key).removeValue()
+    }
+
+    fun modify(key: String, newTask: TaskData) {
+        // TODO("make suspend  setValue(Object value, CompletionListener listener)")
+        dbRef.child(key).setValue(newTask)
     }
 }
 

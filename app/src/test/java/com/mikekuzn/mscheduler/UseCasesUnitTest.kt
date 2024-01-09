@@ -1,11 +1,11 @@
 package com.mikekuzn.mscheduler
 
+import com.mikekuzn.mscheduler.alarmmanager.CustomAlarmManagerInter
 import com.mikekuzn.mscheduler.data.Repository
-import com.mikekuzn.mscheduler.domain.entities.Task
 import com.mikekuzn.mscheduler.domain.GetCurrentTime
 import com.mikekuzn.mscheduler.domain.UseCases
 import com.mikekuzn.mscheduler.domain.UseCasesInter
-import com.mikekuzn.mscheduler.features.alarmManager.CustomAlarmManagerInter
+import com.mikekuzn.mscheduler.domain.entities.Task
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test

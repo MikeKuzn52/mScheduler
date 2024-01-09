@@ -1,4 +1,4 @@
-package com.mikekuzn.mscheduler.features.taskList.draganddroplist
+package com.mikekuzn.mscheduler.features.custom_list
 
 import android.util.Log
 import androidx.compose.runtime.Composable
