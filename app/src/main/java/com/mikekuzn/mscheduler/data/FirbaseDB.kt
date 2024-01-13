@@ -33,9 +33,14 @@ class FirebaseDB @AssistedInject constructor(
         dbRef = FirebaseDatabase.getInstance().getReference(userPath)
     }
 
-    fun subscribe(add: (key: String, task: TaskData) -> Unit) {
+    fun subscribe(
+        before: ()->Unit,
+        add: (key: String, task: TaskData)->Unit,
+        after: ()->Unit
+    ) {
         listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                before()
                 Log.d("***[", "onDataChange count=${snapshot.children.count()}")
                 for (data in snapshot.children) {
                     try {
@@ -48,6 +53,7 @@ class FirebaseDB @AssistedInject constructor(
                         dbRef.child(data.key!!).removeValue()
                     }
                 }
+                after()
             }
 
             override fun onCancelled(error: DatabaseError) {

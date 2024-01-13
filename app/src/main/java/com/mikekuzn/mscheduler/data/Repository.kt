@@ -1,6 +1,7 @@
 package com.mikekuzn.mscheduler.data
 
 import com.mikekuzn.mscheduler.domain.RepositoryInter
+import com.mikekuzn.mscheduler.domain.TaskListUpdaterInter
 import com.mikekuzn.mscheduler.domain.entities.Task
 import javax.inject.Inject
 
@@ -9,11 +10,15 @@ class Repository @Inject constructor(
 ) : RepositoryInter {
     private var db: FirebaseDB? = null
 
-    override fun subscribe(userPath: String, add: (task: Task) -> Unit) {
+    override fun subscribe(userPath: String, updater: TaskListUpdaterInter) {
         db = dBFactory.create(userPath)
-        db!!.subscribe { key: String, taskData: TaskData ->
-            add(taskData.toTask(key))
-        }
+        db!!.subscribe(
+            before = { updater.before() },
+            add = { key: String, taskData: TaskData ->
+                updater.addOrUpdate(taskData.toTask(key))
+            },
+            after = {updater.after()},
+        )
     }
 
     override fun unsubscribe() {

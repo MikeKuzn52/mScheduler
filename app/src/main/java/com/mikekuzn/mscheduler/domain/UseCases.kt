@@ -29,15 +29,21 @@ class UseCases @Inject constructor(
             savedUserPath = userPath
             // TODO change subscribe(...) { taskArray[] ->
             //  and remove tasks which key was not found
-            repository.subscribe(userPath) { newTask ->
-                taskListM.find { it.key == newTask.key }?.let {
-                    // TODO check hash sum and change
-                } ?: run {
-                    taskTimeProcess(newTask)
-                    taskListM.add(newTask)
+            repository.subscribe(
+                userPath,
+                object : TaskListUpdater(taskListM, ::localDeleteTask) {
+                    override fun addOrUpdate(newTask: Task) {
+                        super.addOrUpdate(newTask)
+                        taskListM.find { it.key == newTask.key }?.let {
+                            // TODO("check hash sum and change")
+                        } ?: run {
+                            taskTimeProcess(newTask)
+                            taskListM.add(newTask)
 
+                        }
+                    }
                 }
-            }
+            )
         }
     }
 
@@ -69,8 +75,7 @@ class UseCases @Inject constructor(
             newTask.key = newKey
             if (newKey.isNullOrEmpty()) {
                 // TODO newKey == null -> Toast or anything also and repeat to write
-            }
-            else if (!taskListM.any{ it.key == newKey }) {
+            } else if (!taskListM.any { it.key == newKey }) {
                 taskListM.add(newTask)
             }
         }
@@ -79,6 +84,13 @@ class UseCases @Inject constructor(
     override fun deleteTask(index: Int) {
         // TODO("make suspend")
         repository.delete(taskListM[index].key)
+        localDeleteTask(index)
+    }
+
+    private fun localDeleteTask(index: Int) {
+        if (next.first == taskListM[index]) {
+            TODO("localDeleteTask need set time for next task")
+        }
         taskListM.removeAt(index)
     }
 
