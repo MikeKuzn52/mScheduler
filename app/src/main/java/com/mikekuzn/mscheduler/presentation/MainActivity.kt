@@ -10,11 +10,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import com.mikekuzn.mscheduler.features.editTask.EditTaskViewModel
-import com.mikekuzn.mscheduler.features.editTask.dateTimePicker.DateTimePickerInter
-import com.mikekuzn.mscheduler.features.editTask.dateTimePicker.LocalDateTimePickerProvider
-import com.mikekuzn.mscheduler.features.signing.LocalSigning
-import com.mikekuzn.mscheduler.features.signing.SigningInter
+import com.mikekuzn.mscheduler.EditTaskViewModel
+import com.mikekuzn.mscheduler.LocalSigning
+import com.mikekuzn.mscheduler.SigningInter
+import com.mikekuzn.mscheduler.dateTimePicker.DateTimePickerInter
+import com.mikekuzn.mscheduler.dateTimePicker.LocalDateTimePickerProvider
 import com.mikekuzn.mscheduler.ui.theme.MSchedulerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

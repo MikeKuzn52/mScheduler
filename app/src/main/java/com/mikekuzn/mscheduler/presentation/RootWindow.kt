@@ -13,15 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.mikekuzn.mscheduler.features.editTask.AddTaskUI
-import com.mikekuzn.mscheduler.features.editTask.EditTaskUI
-import com.mikekuzn.mscheduler.features.editTask.EditTaskViewModel
-import com.mikekuzn.mscheduler.features.editTask.EditTaskViewModelInter
-import com.mikekuzn.mscheduler.features.signing.SignOut
-import com.mikekuzn.mscheduler.features.signing.SigningUI
-import com.mikekuzn.mscheduler.features.taskList.TaskListUI
-import com.mikekuzn.mscheduler.features.taskList.TaskListViewModel
-import com.mikekuzn.mscheduler.features.taskList.TaskListViewModelInter
+import com.mikekuzn.mscheduler.AddTaskUI
+import com.mikekuzn.mscheduler.EditTaskUI
+import com.mikekuzn.mscheduler.EditTaskViewModel
+import com.mikekuzn.mscheduler.EditTaskViewModelInter
+import com.mikekuzn.mscheduler.SignOut
+import com.mikekuzn.mscheduler.SigningUI
+import com.mikekuzn.mscheduler.TaskListUI
+import com.mikekuzn.mscheduler.TaskListViewModel
+import com.mikekuzn.mscheduler.TaskListViewModelInter
 
 @Composable
 fun RootWindow(

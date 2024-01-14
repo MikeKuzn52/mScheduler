@@ -15,5 +15,14 @@ dependencyResolutionManagement {
 
 rootProject.name = "mScheduler"
 include ':app'
+include ':Resources'
 include ':alarmmanager'
 include ':DragDropSwipeScrollList'
+include ':features:core:TaskListEntity'
+include ':features:core:AlermUseCases'
+include ':features:core:Data'
+include ':features:core:UseCases'
+include ':features:Signing'
+include ':features:TaskList'
+include ':features:EditTask'
+include ':features:core:SoundTask'

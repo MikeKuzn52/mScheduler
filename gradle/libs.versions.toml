@@ -13,9 +13,11 @@ activity-compose = "1.8.0"
 compose-bom = "2023.03.00"
 mockito-core = "5.5.0"
 runtime-livedata = "1.5.4"
-firebase-auth = "22.2.0"
 appcompat = "1.6.1"
 material = "1.11.0"
+firebase-auth-ktx = "22.3.0"
+foundation-android = "1.5.4"
+databinding-compiler = "8.2.1"
 
 [libraries]
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayout-compose" }
@@ -40,9 +42,11 @@ ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version = "2.6.2" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version = "2.6.0" }
-firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebase-auth" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebase-auth-ktx" }
+androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundation-android" }
+androidx-databinding-compiler = { group = "androidx.databinding", name = "databinding-compiler", version.ref = "databinding-compiler" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

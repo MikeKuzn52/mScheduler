@@ -46,10 +46,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion '1.4.3'
     }
-    packaging {
-        resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
-        }
+    packagingOptions {
+        exclude("META-INF/LICENSE.md")
+        exclude("META-INF/NOTICE.md")
     }
     testOptions {
         unitTests.returnDefaultValues = true
@@ -57,7 +56,6 @@ android {
 }
 
 dependencies {
-
     implementation libs.core.ktx
     implementation libs.lifecycle.runtime.ktx
     implementation libs.activity.compose
@@ -84,11 +82,15 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
-    // Firebase
-    implementation platform('com.google.firebase:firebase-bom:32.4.0')
-    implementation 'com.google.firebase:firebase-database-ktx'
-    implementation libs.firebase.auth
     // Modules
-    implementation project(':alarmmanager')
+    implementation project(':features:core:TaskListEntity')
     implementation project(':DragDropSwipeScrollList')
+    implementation project(':features:core:AlermUseCases')
+    implementation project(':alarmmanager')
+    implementation project(':features:core:Data')
+    implementation project(':features:core:UseCases')
+    implementation project(':features:core:SoundTask')
+    implementation project(':features:Signing')
+    implementation project(':features:TaskList')
+    implementation project(':features:EditTask')
 }

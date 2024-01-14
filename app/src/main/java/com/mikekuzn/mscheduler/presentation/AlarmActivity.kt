@@ -32,11 +32,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mikekuzn.mscheduler.R
-import com.mikekuzn.mscheduler.domain.UseCasesInter
-import com.mikekuzn.mscheduler.domain.entities.Task
-import com.mikekuzn.mscheduler.features.soundTask.SoundTaskInter
+import com.mikekuzn.mscheduler.AlarmUseCasesInter
+import com.mikekuzn.mscheduler.entities.Task
+import com.mikekuzn.mscheduler.SoundTaskInter
 import com.mikekuzn.mscheduler.ui.theme.MSchedulerTheme
+import com.mikekuzn.resource.R
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 import javax.inject.Inject
@@ -45,10 +45,10 @@ import kotlin.math.roundToInt
 @AndroidEntryPoint
 class AlarmActivity : ComponentActivity() {
     @Inject
-    lateinit var useCases: UseCasesInter
+    lateinit var alarmUseCases: AlarmUseCasesInter
 
     @Inject
-    lateinit var soundTask: SoundTaskInter
+    lateinit var soundTask: com.mikekuzn.mscheduler.SoundTaskInter
     private lateinit var taskList: List<Task>
     private var taskIndex = 0
     private val currentTask: MutableState<Task?> = mutableStateOf(null)
@@ -62,7 +62,7 @@ class AlarmActivity : ComponentActivity() {
         } else {
             Log.d("***[", "AlarmActivity NextTask $taskIndex")
             currentTask.value = taskList[taskIndex]
-            soundTask.soundTask(currentTask.value!!)
+            soundTask.execute(currentTask.value!!)
             true
         }
 
@@ -86,7 +86,7 @@ class AlarmActivity : ComponentActivity() {
         var time = Calendar.getInstance().timeInMillis
         time -= time % 1000
         val hash: Int = time.hashCode()// TODO getting hashCode from event
-        taskList = useCases.getByHash(hash)
+        taskList = alarmUseCases.getByHash(hash)
         Log.d("***[", "AlarmActivity taskList=$taskList")
         // Close activity if hashCode not found // TODO don't open activity (use receiver or service)
         if (getNextTask()) {
@@ -97,7 +97,7 @@ class AlarmActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        Greeting(useCases, currentTask as State<Task?>, ::getNextTask)
+                        Greeting(alarmUseCases, currentTask as State<Task?>, ::getNextTask)
                     }
                 }
             }
@@ -106,7 +106,7 @@ class AlarmActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(useCases: UseCasesInter, task: State<Task?>, getNext: () -> Unit) {
+fun Greeting(alarmUseCases: AlarmUseCasesInter, task: State<Task?>, getNext: () -> Unit) {
     Column(
         Modifier
             .fillMaxSize()
@@ -141,7 +141,7 @@ fun Greeting(useCases: UseCasesInter, task: State<Task?>, getNext: () -> Unit) {
         }
         Button(
             onClick = {
-                useCases.setReady(task.value!!)
+                alarmUseCases.setReady(task.value!!)
                 getNext()
             },
             modifier = Modifier
