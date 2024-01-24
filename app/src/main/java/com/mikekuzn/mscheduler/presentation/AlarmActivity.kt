@@ -1,5 +1,6 @@
 package com.mikekuzn.mscheduler.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -33,8 +34,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mikekuzn.mscheduler.AlarmUseCasesInter
-import com.mikekuzn.mscheduler.entities.Task
 import com.mikekuzn.mscheduler.SoundTaskInter
+import com.mikekuzn.mscheduler.entities.Task
+import com.mikekuzn.mscheduler.service.AlarmService
 import com.mikekuzn.mscheduler.ui.theme.MSchedulerTheme
 import com.mikekuzn.resource.R
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,9 +48,9 @@ import kotlin.math.roundToInt
 class AlarmActivity : ComponentActivity() {
     @Inject
     lateinit var alarmUseCases: AlarmUseCasesInter
-
     @Inject
-    lateinit var soundTask: com.mikekuzn.mscheduler.SoundTaskInter
+    lateinit var soundTask: SoundTaskInter
+
     private lateinit var taskList: List<Task>
     private var taskIndex = 0
     private val currentTask: MutableState<Task?> = mutableStateOf(null)
@@ -57,17 +59,18 @@ class AlarmActivity : ComponentActivity() {
     private fun getNextTask() =
         if (taskIndex >= taskList.size) {
             Log.d("***[", "AlarmActivity finishActivity")
-            finish()
+// TODO ++++++            finish()
             false
         } else {
             Log.d("***[", "AlarmActivity NextTask $taskIndex")
             currentTask.value = taskList[taskIndex]
-            soundTask.execute(currentTask.value!!)
             true
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        stopAlarmService()
+        soundTask.stop()
         Log.d("***[", "AlarmActivity onCreate")
         /*
         if (signing.signed && signing.isEmailVerified) {
@@ -81,27 +84,33 @@ class AlarmActivity : ComponentActivity() {
         */
 
 
-
-
         var time = Calendar.getInstance().timeInMillis
         time -= time % 1000
         val hash: Int = time.hashCode()// TODO getting hashCode from event
         taskList = alarmUseCases.getByHash(hash)
         Log.d("***[", "AlarmActivity taskList=$taskList")
         // Close activity if hashCode not found // TODO don't open activity (use receiver or service)
-        if (getNextTask()) {
-            setContent {
-                MSchedulerTheme {
-                    // A surface container using the 'background' color from the theme
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
-                    ) {
+        setContent {
+            MSchedulerTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    if (getNextTask()) {
                         Greeting(alarmUseCases, currentTask as State<Task?>, ::getNextTask)
+                    }
+                    else {
+                        Text("Internal error. No events to show")
                     }
                 }
             }
         }
+    }
+
+    private fun stopAlarmService() {
+        val stopIntent = Intent(this, AlarmService::class.java)
+        stopService(stopIntent)
     }
 }
 

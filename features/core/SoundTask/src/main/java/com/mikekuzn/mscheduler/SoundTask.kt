@@ -5,13 +5,18 @@ import android.media.Ringtone
 import android.media.RingtoneManager
 import android.util.Log
 import com.mikekuzn.mscheduler.entities.Task
-import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class SoundTask @Inject constructor(@ActivityContext private val context: Context): SoundTaskInter {
+@Singleton // to save last "ringtone" object
+class SoundTask @Inject constructor(@ApplicationContext private val context: Context): SoundTaskInter {
+
+    private var ringtone: Ringtone? = null
+
     override fun execute(task: Task) {
-        Log.d("***[", "Play ${task.title}")
-        val ringtone: Ringtone? = if (task.isSystemMelody) {
+        Log.d("***[", "SoundTask play ${task.title}")
+        ringtone = if (task.isSystemMelody) {
             RingtoneManager.getRingtone(
                 context,
                 RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
@@ -26,5 +31,10 @@ class SoundTask @Inject constructor(@ActivityContext private val context: Contex
             )
         }
         ringtone?.play()
+    }
+
+    override fun stop() {
+        Log.d("***[", "SoundTask stop")
+        ringtone?.stop()
     }
 }

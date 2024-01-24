@@ -16,7 +16,7 @@ import com.mikekuzn.mscheduler.alarmmanager.CustomAlarmManager
 import com.mikekuzn.mscheduler.alarmmanager.CustomAlarmManagerInter
 import com.mikekuzn.mscheduler.dateTimePicker.DateTimePicker
 import com.mikekuzn.mscheduler.dateTimePicker.DateTimePickerInter
-import com.mikekuzn.mscheduler.presentation.AlarmActivity
+import com.mikekuzn.mscheduler.service.AlarmService
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -51,16 +51,18 @@ abstract class AppModule {
 
     @Binds
     abstract fun provideAlarmManager(impl: CustomAlarmManager): CustomAlarmManagerInter
+
+    @Binds
+    abstract fun provideSoundTask(impl: SoundTask): SoundTaskInter
 }
 
 
-//@InstallIn(ActivityRetainedComponent::class)
 @InstallIn(SingletonComponent::class)
 @Module
 object RetainedModuleObject {
     @Provides
-    @Named("AlarmActivityClass")
-    fun provideAlarmClass(): Class<*> = AlarmActivity::class.java
+    @Named("AlarmClass")
+    fun provideAlarmClass(): Class<*> = AlarmService::class.java
 }
 
 @InstallIn(ActivityRetainedComponent::class)
@@ -82,9 +84,6 @@ abstract class ViewModelModule {
 abstract class ActivityModule {
     @Binds
     abstract fun provideDateTimePicker(impl: DateTimePicker): DateTimePickerInter
-
-    @Binds
-    abstract fun provideSoundTask(impl: SoundTask): SoundTaskInter
 
     @Binds
     abstract fun provideSigning(impl: Signing): SigningInter

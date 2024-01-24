@@ -23,8 +23,6 @@ class UseCases @Inject constructor(
         if (savedUserPath != userPath) {
             savedUserPath?.run { throw Exception("Internal error. Add UserPath") }
             savedUserPath = userPath
-            // TODO change subscribe(...) { taskArray[] ->
-            //  and remove tasks which key was not found
             repository.subscribe(
                 userPath,
                 object : TaskListUpdater(taskListM, ::localDeleteTask) {

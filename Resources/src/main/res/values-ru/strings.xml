@@ -1,18 +1,19 @@
 <resources>
     <string name="app_name">Планировщик</string>
+    <string name="defaultNotification">Планировщик событие…</string>
     <string name="title">Заголовок</string>
     <string name="description">Описание</string>
     <string name="editBack">Заметка/задача</string>
     <string name="nullTaskEdit">Внутренняя ошибка. Попытка редактировать отсутствующую задачу</string>
     <string name="repeatEvent">Повторы:</string>
     <string name="noAnyTasks">Тут будут ваши заметки и задачи</string>
-    <string name="dataFormat">yyyy.MM.dd</string>
-    <string name="dataShortFormat">yy.MM.dd</string>
+    <string name="dataFormat">MM.dd.yyyy</string>
+    <string name="dataShortFormat">MM.dd.yy</string>
     <string name="timeFormat">HH:mm</string>
     <string name="title_activity_alarm">СобытиеПланировщика</string>
     <string name="alarmEvent">СОБЫТИЕ</string>
     <string name="finishEvent">Выполнено</string>
-    <string name="postponeEvent">Отложить действие</string>
+    <string name="postponeEvent">Отложить</string>
     <string name="enterEmail">Введите Email</string>
     <string name="enterPass">Введите пароль</string>
     <string name="showPass">Показать пароль</string>

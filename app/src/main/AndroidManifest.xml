@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <application
         android:name=".di.BaseApplication"
         android:allowBackup="true"
@@ -26,9 +31,15 @@
         </activity>
         <activity
             android:name=".presentation.AlarmActivity"
-            android:exported="false"
+            android:exported="true"
+            android:enabled="true"
             android:label="@string/title_activity_alarm"
             android:theme="@style/Theme.MScheduler" />
+        <service
+            android:name=".service.AlarmService"
+            android:foregroundServiceType="shortService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

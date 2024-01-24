@@ -13,26 +13,27 @@ import javax.inject.Named
 
 class CustomAlarmManager @Inject constructor(
     @ApplicationContext private val context: Context,
-    @Named("AlarmActivityClass") private val activity: Class<*>,
+    @Named("AlarmClass") private val clazz: Class<*>,
 ) : CustomAlarmManagerInter {
-    private fun getPendingIntent(hashCode: Int) = PendingIntent.getActivity(
+
+    private val alarmManager by lazy {
+        context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    }
+
+    private fun getPendingIntent(hashCode: Int) = PendingIntent.getService(
         context, hashCode,
-        Intent(context, activity).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-        },
+        Intent(context, clazz),
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
     )
 
     @SuppressLint("ScheduleExactAlarm", "SimpleDateFormat")
     override fun writeAlarm(hashCode: Int, timeInMillis: Long) {
         Log.d("***[", "writeAlarm ${SimpleDateFormat("yy.MM.dd HH:mm").format(timeInMillis)}")
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pendingIntent = getPendingIntent(hashCode)
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
     }
 
     override fun cancelAlarm(hashCode: Int) {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pendingIntent = getPendingIntent(hashCode)
         alarmManager.cancel(pendingIntent)
     }
