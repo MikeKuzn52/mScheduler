@@ -24,22 +24,18 @@ class Repository @Inject constructor(
         db = null
     }
 
-    override fun add(task: Task) = db?.add(task.toTaskData())
+    override suspend fun add(task: Task) = db?.add(task.toTaskData())
 
-    override fun delete(key: String?): Boolean {
-        // TODO("make suspend")
+    override suspend fun delete(key: String?): Boolean {
         if (!key.isNullOrEmpty()) {
-            db?.delete(key)
-            return true
+            return db?.delete(key)?: false
         }
         return false
     }
 
-    override fun modify(key: String, task: Task): Boolean {
-        // TODO("make suspend")
+    override suspend fun modify(key: String, task: Task): Boolean {
         if (db != null && key.isNotEmpty()) {
-            db!!.modify(key, task.toTaskData())
-            return true
+            return db!!.modify(key, task.toTaskData())
         }
         return false
     }

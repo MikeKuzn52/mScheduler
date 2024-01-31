@@ -10,6 +10,8 @@ import com.google.firebase.database.getValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class FirebaseDB @AssistedInject constructor(
     @Assisted("FirebaseUserPath")
@@ -24,9 +26,9 @@ class FirebaseDB @AssistedInject constructor(
     }
 
     fun subscribe(
-        before: ()->Unit,
-        add: (key: String, task: TaskData)->Unit,
-        after: ()->Unit
+        before: () -> Unit,
+        add: (key: String, task: TaskData) -> Unit,
+        after: () -> Unit
     ) {
         listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -57,24 +59,33 @@ class FirebaseDB @AssistedInject constructor(
         listener?.let { dbRef.removeEventListener(it) }
     }
 
-    fun add(taskData: TaskData): String? {
+    suspend fun add(taskData: TaskData): String? {
         dbRef.push().apply {
             Log.d("***[", "add taskData=$taskData")
-            // TODO("make suspend  setValue(taskData, CompletionListener listener)")
-            setValue(taskData)
-            return key
+            return suspendCoroutine { continuation ->
+                setValue(taskData) { error, _ ->
+                    continuation.resume(
+                        if (error == null) key else null
+                    )
+                }
+            }
         }
     }
 
-    fun delete(key: String) {
-        // TODO("make suspend  removeValue(CompletionListener listener)")
-        dbRef.child(key).removeValue()
-    }
+    suspend fun delete(key: String): Boolean =
+        suspendCoroutine { continuation ->
+            dbRef.child(key).removeValue() { error, _ ->
+                continuation.resume(error == null)
+            }
+        }
 
-    fun modify(key: String, newTask: TaskData) {
-        // TODO("make suspend  setValue(Object value, CompletionListener listener)")
-        dbRef.child(key).setValue(newTask)
-    }
+
+    suspend fun modify(key: String, newTask: TaskData): Boolean =
+        suspendCoroutine { continuation ->
+            dbRef.child(key).setValue(newTask) { error, _ ->
+                continuation.resume(error == null)
+            }
+        }
 }
 
 @AssistedFactory

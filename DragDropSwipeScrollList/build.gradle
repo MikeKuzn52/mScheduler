@@ -51,12 +51,10 @@ dependencies {
     implementation platform(libs.compose.bom)
     implementation libs.androidx.constraintlayout.compose
     testImplementation libs.junit
-    testImplementation libs.mockito.core
     androidTestImplementation libs.androidx.test.ext.junit
     androidTestImplementation libs.espresso.core
     androidTestImplementation platform(libs.compose.bom)
     androidTestImplementation libs.ui.test.junit4
     androidTestImplementation platform(libs.compose.bom)
-    debugImplementation libs.ui.tooling
     debugImplementation libs.ui.test.manifest
 }

@@ -31,6 +31,10 @@ android {
 }
 
 dependencies {
+    // Test
+    testImplementation libs.junit
+    testImplementation libs.mockk
+    testImplementation libs.robolectric
     // hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)

@@ -10,12 +10,15 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton // to save last "ringtone" object
-class SoundTask @Inject constructor(@ApplicationContext private val context: Context): SoundTaskInter {
+class SoundTask @Inject constructor(
+    @ApplicationContext private val context: Context,
+) : SoundTaskInter {
 
     private var ringtone: Ringtone? = null
 
     override fun execute(task: Task) {
         Log.d("***[", "SoundTask play ${task.title}")
+        ringtone?.stop() // Stop old playing
         ringtone = if (task.isSystemMelody) {
             RingtoneManager.getRingtone(
                 context,
@@ -25,10 +28,7 @@ class SoundTask @Inject constructor(@ApplicationContext private val context: Con
                 RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
             )
         } else {
-            RingtoneManager.getRingtone(
-                context,
-                task.melody
-            )
+            RingtoneManager.getRingtone(context, task.melody)
         }
         ringtone?.play()
     }

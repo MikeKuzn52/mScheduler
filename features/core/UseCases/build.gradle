@@ -28,16 +28,16 @@ android {
     kotlinOptions {
         jvmTarget = '17'
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
+    // Test
     testImplementation libs.junit
-    testImplementation libs.mockito.core
-    androidTestImplementation libs.androidx.test.ext.junit
-    androidTestImplementation libs.espresso.core
-    androidTestImplementation platform(libs.compose.bom)
-    androidTestImplementation libs.ui.test.junit4
-    androidTestImplementation platform(libs.compose.bom)
+    testImplementation libs.mockk
+    testImplementation libs.coroutines.test
     // hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)

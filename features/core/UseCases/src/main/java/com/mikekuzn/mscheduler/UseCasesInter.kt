@@ -8,11 +8,11 @@ interface UseCasesInter {
     fun clrUserPath()
 
     fun getTaskList(): SnapshotStateList<Task>
-    fun swap(from: Int, to: Int)
-    fun addTask(newTask: Task)
-    fun deleteTask(index: Int)
-    fun modifyTask(index: Int)
-    fun setAsSubTask(index: Int)
+    suspend fun swap(from: Int, to: Int)
+    suspend fun addTask(newTask: Task)
+    suspend fun deleteTask(index: Int)
+    suspend fun modifyTask(index: Int)
+    suspend fun setAsSubTask(index: Int)
 
     val isSigned: Boolean
 }

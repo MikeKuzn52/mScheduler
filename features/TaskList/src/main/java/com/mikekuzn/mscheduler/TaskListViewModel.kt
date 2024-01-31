@@ -2,8 +2,10 @@ package com.mikekuzn.mscheduler
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mikekuzn.mscheduler.entities.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,19 +18,27 @@ class TaskListViewModel @Inject constructor(
         get() = useCases.getTaskList()
 
     override fun swap(from: Int, to: Int) {
-        useCases.swap(from, to)
+        viewModelScope.launch {
+            useCases.swap(from, to)
+        }
     }
 
     override fun addTask(newTask: Task) {
-        useCases.addTask(newTask)
+        viewModelScope.launch {
+            useCases.addTask(newTask)
+        }
     }
 
     override fun setAsSubTask(index: Int) {
-        useCases.setAsSubTask(index)
+        viewModelScope.launch {
+            useCases.setAsSubTask(index)
+        }
     }
 
     override fun deleteTask(index: Int) {
-        useCases.deleteTask(index)
+        viewModelScope.launch {
+            useCases.deleteTask(index)
+        }
     }
 
     override val isSigned get() = useCases.isSigned
