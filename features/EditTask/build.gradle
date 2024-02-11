@@ -48,7 +48,6 @@ dependencies {
     implementation platform(libs.compose.bom)
     implementation libs.androidx.constraintlayout.compose
     implementation libs.androidx.foundation.android
-    implementation project(':features:TaskList')
     testImplementation libs.junit
     androidTestImplementation libs.androidx.test.ext.junit
     androidTestImplementation libs.espresso.core
@@ -57,7 +56,7 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     // Modules
-    implementation project(':features:core:TaskListEntity')
+    implementation project(':features:core:TaskListEntityApi')
     implementation project(':features:core:UseCases')
     implementation project(':Resources')
 }

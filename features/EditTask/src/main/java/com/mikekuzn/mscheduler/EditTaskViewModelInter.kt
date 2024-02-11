@@ -13,4 +13,5 @@ interface EditTaskViewModelInter {
     fun invertUseTime()
     fun changeDataTime(newDataTime: Long)
     fun setRepeat(repeat: Repeat)
+    fun addTask(newTask: Task)
 }

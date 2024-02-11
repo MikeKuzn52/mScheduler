@@ -4,20 +4,22 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mikekuzn.mscheduler.entities.Repeat
 import com.mikekuzn.mscheduler.entities.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class EditTaskViewModel @Inject constructor(
-    val handle: SavedStateHandle
+    val handle: SavedStateHandle,
+    private val useCases: UseCasesInter,
 ) : ViewModel(), EditTaskViewModelInter {
 
     private val editTaskM = mutableStateOf<Task?>(null)
     override val editTask
         get() = editTaskM as State<Task?>
-
 
     override fun edit(task: Task?) {
         editTaskM.value = task ?: Task()
@@ -45,5 +47,11 @@ class EditTaskViewModel @Inject constructor(
 
     override fun setRepeat(repeat: Repeat) {
         editTaskM.value = editTask.value!!.copy(repeat = repeat)
+    }
+
+    override fun addTask(newTask: Task) {
+        viewModelScope.launch {
+            useCases.addTask(newTask)
+        }
     }
 }

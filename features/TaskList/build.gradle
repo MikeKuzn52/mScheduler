@@ -56,7 +56,7 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     // Modules
-    implementation project(':features:core:TaskListEntity')
+    implementation project(':features:core:TaskListEntityApi')
     implementation project(':features:core:UseCases')
     implementation project(':DragDropSwipeScrollList')
     implementation project(':Resources')

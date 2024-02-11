@@ -47,7 +47,6 @@ import java.util.Calendar
 @Composable
 fun EditTaskUI(
     vm: EditTaskViewModelInter = hiltViewModel<EditTaskViewModel>(),
-    tlVm: TaskListViewModelInter = hiltViewModel<TaskListViewModel>(),
     ) {
     val dateTimePickerProvider = LocalDateTimePickerProvider.current
     val editTask = vm.editTask.value
@@ -85,7 +84,7 @@ fun EditTaskUI(
                     contentDescription = "Apply new task",
                     modifier = Modifier.clickable {
                         if (editTask.title.isNotEmpty()) {
-                            tlVm.addTask(editTask)
+                            vm.addTask(editTask)
                             vm.stopEdit()
                         } else {
                             titleEnterError.value = true

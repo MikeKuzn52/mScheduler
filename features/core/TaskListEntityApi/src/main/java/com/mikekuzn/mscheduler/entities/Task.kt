@@ -1,7 +1,7 @@
 package com.mikekuzn.mscheduler.entities
 
+import android.graphics.Color
 import android.net.Uri
-import androidx.compose.ui.graphics.Color
 import java.util.Calendar
 
 data class Task(
@@ -13,7 +13,7 @@ data class Task(
     var dataTime: Long = Calendar.getInstance().timeInMillis,
     var repeat: Repeat = Repeat.Once,
     val minutesBefore: List<Int> = listOf(0), // TODO not yet implemented
-    val colorValue: Color = Color.White, // TODO not yet implemented
+    val colorValue: Color = Color(), // TODO not yet implemented
     val checked: Boolean = true,
     val check: Boolean = false,
     val isSystemMelody: Boolean = true,

@@ -85,12 +85,9 @@ dependencies {
     kaptAndroidTest libs.hilt.compiler
     androidTestAnnotationProcessor libs.hilt.annotation
     // Modules
-    implementation project(':features:core:TaskListEntity')
-    implementation project(':DragDropSwipeScrollList')
+    implementation project(':features:core:TaskListEntityApi')
     implementation project(':features:core:AlermUseCases')
-    implementation project(':alarmmanager')
-    implementation project(':features:core:Data')
-    implementation project(':features:core:UseCases')
+    implementation project(':features:core:Data') // only for file Di.kt
     implementation project(':features:core:SoundTask')
     implementation project(':features:Signing')
     implementation project(':features:TaskList')
