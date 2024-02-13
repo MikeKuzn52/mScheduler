@@ -34,6 +34,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion '1.4.3'
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -49,9 +52,10 @@ dependencies {
     implementation libs.androidx.constraintlayout.compose
     implementation libs.androidx.foundation.android
     implementation libs.androidx.databinding.compiler
+    // Test
     testImplementation libs.junit
-    androidTestImplementation libs.androidx.test.ext.junit
-    androidTestImplementation libs.espresso.core
+    testImplementation libs.mockk
+    testImplementation libs.robolectric
     // Firebase auth
     implementation libs.firebase.auth.ktx
     // hilt
