@@ -31,4 +31,5 @@
     <string name="signOutTitle">Are you sure that you want to log out</string>
     <string name="signOutCancel">Cancel</string>
     <string name="signOutConfirm">Log out</string>
+    <string name="timeToEvent">Time to event</string>
 </resources>

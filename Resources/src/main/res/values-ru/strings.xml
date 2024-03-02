@@ -31,4 +31,5 @@
     <string name="signOutTitle">Вы уверены, что хотите выйти</string>
     <string name="signOutCancel">Отмена</string>
     <string name="signOutConfirm">Выйти</string>
+    <string name="timeToEvent">Время до события</string>
 </resources>

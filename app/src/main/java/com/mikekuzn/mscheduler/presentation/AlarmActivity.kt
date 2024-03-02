@@ -3,6 +3,7 @@ package com.mikekuzn.mscheduler.presentation
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.Animatable
@@ -26,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -40,7 +42,6 @@ import com.mikekuzn.mscheduler.service.AlarmService
 import com.mikekuzn.mscheduler.ui.theme.MSchedulerTheme
 import com.mikekuzn.resource.R
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -52,44 +53,17 @@ class AlarmActivity : ComponentActivity() {
     lateinit var soundTask: SoundTaskInter
 
     private lateinit var taskList: List<Task>
-    private var taskIndex = 0
+    private var taskIndex = -1
     private val currentTask: MutableState<Task?> = mutableStateOf(null)
-
-
-    private fun getNextTask() =
-        if (taskIndex >= taskList.size) {
-            Log.d("***[", "AlarmActivity finishActivity")
-// TODO ++++++            finish()
-            false
-        } else {
-            Log.d("***[", "AlarmActivity NextTask $taskIndex")
-            currentTask.value = taskList[taskIndex]
-            true
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         stopAlarmService()
         soundTask.stop()
-        Log.d("***[", "AlarmActivity onCreate")
-        /*
-        if (signing.signed && signing.isEmailVerified) {
-        // TODO
-
-        }
-        else {
-        // TODO
-            SigningUI(signing = signing)
-        }
-        */
-
-
-        var time = Calendar.getInstance().timeInMillis
-        time -= time % 1000
-        val hash: Int = time.hashCode()// TODO getting hashCode from event
-        taskList = alarmUseCases.getByHash(hash)
-        Log.d("***[", "AlarmActivity taskList=$taskList")
-        // Close activity if hashCode not found // TODO don't open activity (use receiver or service)
+        // TODO("Move string constants to separate file")
+        val actionTime = intent?.extras?.getLong("ACTION_TIME")
+        Log.d("***[", "AlarmActivity onCreate actionTime=$actionTime ${intent?.extras}")
+        taskList = alarmUseCases.getByTime(actionTime)
         setContent {
             MSchedulerTheme {
                 // A surface container using the 'background' color from the theme
@@ -108,6 +82,17 @@ class AlarmActivity : ComponentActivity() {
         }
     }
 
+    private fun getNextTask() =
+        if (++taskIndex >= taskList.size) {
+            Log.d("***[", "AlarmActivity no more events")
+            finish()
+            false
+        } else {
+            Log.d("***[", "AlarmActivity NextTask $taskIndex")
+            currentTask.value = taskList[taskIndex]
+            true
+        }
+
     private fun stopAlarmService() {
         val stopIntent = Intent(this, AlarmService::class.java)
         stopService(stopIntent)
@@ -123,6 +108,7 @@ fun Greeting(alarmUseCases: AlarmUseCasesInter, task: State<Task?>, getNext: () 
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        val context = LocalContext.current
         Text(
             modifier = Modifier.padding(10.dp),
             text = stringResource(id = R.string.alarmEvent),
@@ -162,7 +148,8 @@ fun Greeting(alarmUseCases: AlarmUseCasesInter, task: State<Task?>, getNext: () 
         }
 
         Button(onClick = {
-            // TODO() useCases.postpone(task.value, ...)
+            // TODO("Not yet implemented: alarmUseCases.postpone(task.value, ...)")
+            Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
         }) {
             Text(text = stringResource(id = R.string.postponeEvent))
         }

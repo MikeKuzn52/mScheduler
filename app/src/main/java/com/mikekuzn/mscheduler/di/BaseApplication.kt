@@ -1,6 +1,9 @@
 package com.mikekuzn.mscheduler.di
 
 import android.app.Application
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import com.mikekuzn.mscheduler.Signing
 import com.mikekuzn.mscheduler.SigningInter
 import com.mikekuzn.mscheduler.SoundTask
@@ -16,10 +19,10 @@ import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.scopes.ActivityRetainedScoped
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineExceptionHandler
 import javax.inject.Named
-import javax.inject.Singleton
 
 @HiltAndroidApp
 class BaseApplication: Application() {
@@ -49,8 +52,12 @@ abstract class RetainedModule {
 
 @InstallIn(ViewModelComponent::class)
 @Module
-abstract class ViewModelModule {
-
+class ViewModelModule {
+    @Provides
+    fun provideExceptionHandler(@ApplicationContext context: Context) = CoroutineExceptionHandler { _, throwable ->
+        Log.e("***[", "Error $throwable")
+        Toast.makeText(context, "Error ${throwable.message}", Toast.LENGTH_LONG).show()
+    }
 }
 
 @InstallIn(ActivityComponent::class)

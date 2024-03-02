@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.mikekuzn.mscheduler.entities.Repeat
 import com.mikekuzn.mscheduler.entities.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class EditTaskViewModel @Inject constructor(
     val handle: SavedStateHandle,
     private val useCases: UseCasesInter,
+    private val exceptionHandler: CoroutineExceptionHandler,
 ) : ViewModel(), EditTaskViewModelInter {
 
     private val editTaskM = mutableStateOf<Task?>(null)
@@ -50,7 +52,7 @@ class EditTaskViewModel @Inject constructor(
     }
 
     override fun addTask(newTask: Task) {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             useCases.addTask(newTask)
         }
     }

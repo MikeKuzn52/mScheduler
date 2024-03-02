@@ -32,7 +32,7 @@ class ForegroundHelper(private val serviceContext: Service) {
         serviceContext.startForeground(NOTIFICATION_ID, notificationBuilder.build())
     }
 
-    fun updateNotificationText(text: String) {
+    fun updateNotificationText(text: String?) {
         notificationManager.notify(
             NOTIFICATION_ID, notificationBuilder.setContentText(text).build()
         )

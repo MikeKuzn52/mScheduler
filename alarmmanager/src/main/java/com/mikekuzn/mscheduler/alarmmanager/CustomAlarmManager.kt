@@ -20,16 +20,18 @@ class CustomAlarmManager @Inject constructor(
         context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     }
 
-    private fun getPendingIntent(hashCode: Int) = PendingIntent.getService(
+    private fun getPendingIntent(hashCode: Int, addData: ((intent: Intent) -> Unit)? = null) = PendingIntent.getService(
         context, hashCode,
-        Intent(context, clazz),
+        Intent(context, clazz).apply {
+            addData?.invoke(this)
+        },
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
     )
 
     @SuppressLint("ScheduleExactAlarm", "SimpleDateFormat")
-    override fun writeAlarm(hashCode: Int, timeInMillis: Long) {
+    override fun writeAlarm(hashCode: Int, timeInMillis: Long, addData: ((intent: Intent) -> Unit)?) {
         Log.d("***[", "writeAlarm ${SimpleDateFormat("yy.MM.dd HH:mm").format(timeInMillis)}")
-        val pendingIntent = getPendingIntent(hashCode)
+        val pendingIntent = getPendingIntent(hashCode, addData)
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
     }
 

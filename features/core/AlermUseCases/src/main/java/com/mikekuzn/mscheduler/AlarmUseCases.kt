@@ -1,26 +1,32 @@
 package com.mikekuzn.mscheduler
 
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.util.Log
 import com.mikekuzn.mscheduler.alarmmanager.CustomAlarmManagerInter
 import com.mikekuzn.mscheduler.entities.Task
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.min
+
 
 class AlarmUseCases @Inject constructor(
     private val taskList: TaskList,
     private val alarmManager: CustomAlarmManagerInter,
     private val getCurrentTime: GetCurrentTime,
+    @ApplicationContext private val context: Context,
 ) : AlarmUseCasesInter, AlarmUseCasesUpdateInter {
 
     private var next: Pair<Task?, Long> = null to Long.MAX_VALUE
 
-    override fun getByHash(hash: Int): List<Task> {
+    // Вернуть список из всех задачь с совпадающим временем события (таких может быть несколько)
+    override fun getByTime(time: Long?): List<Task> {
         val resultTaskList = mutableListOf<Task>()
         for (task in taskList.getTaskList()) {
             task.timeForeach {
-                Log.d("***[", "getByHash $it =?= $hash")
-                if (it.hashCode() == hash) {
+                Log.d("***[", "getByTime $it =?= $time")
+                if (it == time) {
                     resultTaskList.add(task)
                 }
             }
@@ -29,7 +35,7 @@ class AlarmUseCases @Inject constructor(
     }
 
     override fun setReady(task: Task) {
-        TODO("Not yet implemented")
+        // TODO("Not yet implemented")
     }
 
     override fun postpone(task: Task, dataTimePostpone: Long) {
@@ -51,13 +57,32 @@ class AlarmUseCases @Inject constructor(
             if (next.second != Long.MAX_VALUE) {
                 alarmManager.cancelAlarm(next.second.hashCode())
             }
-            alarmManager.writeAlarm(newDataTime.hashCode(), newDataTime)
-            next = task to newDataTime
+            setNext(task, newDataTime)
         }
+    }
+
+    private fun setNext(task: Task, newDataTime: Long) {
+        alarmManager.writeAlarm(
+            newDataTime.hashCode(),
+            newDataTime - 30000,
+        ) {
+            // TODO("Move string constants to separate file")
+            it.putExtra("TIME", newDataTime)
+            it.putExtra("TITLE", task.title)
+        }
+        next = task to newDataTime
+        // TODO("move SharedPreferences to separate file/module")
+        val prefs = context.getSharedPreferences("NextAlarmEvent", MODE_PRIVATE)
+        prefs.edit()
+            .putLong("EVENT_TIME", newDataTime)
+            .putString("EVENT_TITLE", task.title)
+            .apply()
     }
 
     override fun updateWhenDelete(task: Task) {
         if (next.first == task) {
+            alarmManager.cancelAlarm(next.second.hashCode())
+            next = null to Long.MAX_VALUE
             // TODO("localDeleteTask need set time for next task")
         }
     }
