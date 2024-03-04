@@ -19,8 +19,6 @@ class AlarmUseCasesTest {
     private val alarmManager = mockk<CustomAlarmManagerInter>()
     private val timeGetter = mockk<GetCurrentTime>()
     private val appContext = mockk<Context>()
-    private val sharedPreferences = mockk<SharedPreferences>()
-    private val editor = mockk<SharedPreferences.Editor>()
     private lateinit var alarmUseCases: AlarmUseCases
     private val taskListSameTime = listOf(
         Task(useTime = true, dataTime = 100000L + 10000 * 1000, minutesBefore = listOf(10000)),
@@ -32,11 +30,6 @@ class AlarmUseCasesTest {
         every { timeGetter.execute() } returns 50
         every { alarmManager.writeAlarm(any(), any(), any()) } returns Unit
         every { alarmManager.cancelAlarm(any()) } returns Unit
-        every { appContext.getSharedPreferences(any(), any()) } returns sharedPreferences
-        every { sharedPreferences.edit() } returns editor
-        every { editor.putLong(any(), any()) } returns editor
-        every { editor.putString(any(), any()) } returns editor
-        every { editor.apply() } returns Unit
         taskList.getTaskList().clear()
         alarmUseCases = AlarmUseCases(
             taskList,

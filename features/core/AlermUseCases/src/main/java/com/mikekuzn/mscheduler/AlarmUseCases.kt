@@ -42,16 +42,23 @@ class AlarmUseCases @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun setNextAlarm() {
-        TODO("Not yet implemented")
+    override fun setNextAlarm(): Boolean {
+        Log.d("***[", "setNextAlarm taskList.size=${taskList.getTaskList().size}")
+        val currentTime = System.currentTimeMillis()
+        var newNext: Pair<Task?, Long> = null to Long.MAX_VALUE
+        for (task in taskList.getTaskList()) {
+            val time = task.getNext(currentTime)
+            if (time < newNext.second) {
+                newNext = task to time
+            }
+        }
+        newNext.first?.let { setNext(it, newNext.second) }
+        return taskList.getTaskList().size != 0 // TODO("size != 0 -> isInit")
     }
 
     override fun updateForTask(task: Task) {
         val systemDataTime = getCurrentTime.execute()
-        val newDataTime = getNext(
-            task,
-            systemDataTime
-        )
+        val newDataTime = task.getNext(systemDataTime)
         if (newDataTime != Long.MAX_VALUE && next.second > newDataTime) {
             // Заменить следующее событие будильника
             if (next.second != Long.MAX_VALUE) {
@@ -71,34 +78,27 @@ class AlarmUseCases @Inject constructor(
             it.putExtra("TITLE", task.title)
         }
         next = task to newDataTime
-        // TODO("move SharedPreferences to separate file/module")
-        val prefs = context.getSharedPreferences("NextAlarmEvent", MODE_PRIVATE)
-        prefs.edit()
-            .putLong("EVENT_TIME", newDataTime)
-            .putString("EVENT_TITLE", task.title)
-            .apply()
     }
 
     override fun updateWhenDelete(task: Task) {
         if (next.first == task) {
             alarmManager.cancelAlarm(next.second.hashCode())
             next = null to Long.MAX_VALUE
-            // TODO("localDeleteTask need set time for next task")
+            setNextAlarm()
         }
     }
 
     // Вернуть время следующего после dataTimeLess события или Long.MAX_VALUE
-    private fun getNext(task: Task, dataTimeLess: Long): Long {
+    private fun Task.getNext(dataTimeLess: Long): Long {
         var minDataTime = Long.MAX_VALUE
-        if (task.useTime) {
-            task.timeForeach {
+        if (useTime) {
+            timeForeach {
                 if (it > dataTimeLess) {
                     minDataTime = min(it, minDataTime)
                 }
             }
         }
         return minDataTime
-
     }
 
     private fun Task.timeForeach(handle: (currentDataTime: Long) -> Unit) {

@@ -6,5 +6,5 @@ interface AlarmUseCasesInter {
     fun getByTime(time: Long?): List<Task>
     fun setReady(task: Task)
     fun postpone(task: Task, dataTimePostpone: Long)
-    fun setNextAlarm()
+    fun setNextAlarm(): Boolean
 }

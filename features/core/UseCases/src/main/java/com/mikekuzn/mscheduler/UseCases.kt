@@ -33,7 +33,6 @@ class UseCases @Inject constructor(
                         } ?: run {
                             alarmUpdater.updateForTask(task)
                             taskListM.add(task)
-
                         }
                     }
                     override fun after() {
