@@ -13,6 +13,8 @@ import dagger.assisted.AssistedInject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+const val TAG = "mScheduler"
+
 class FirebaseDB @AssistedInject constructor(
     @Assisted("FirebaseUserPath")
     private val userPath: String
@@ -21,7 +23,7 @@ class FirebaseDB @AssistedInject constructor(
     private var listener: ValueEventListener? = null
 
     init {
-        Log.d("***[", "FirebaseDB init for userPath=$userPath")
+        Log.d(TAG, "FirebaseDB init for userPath=$userPath")
         dbRef = FirebaseDatabase.getInstance().getReference(userPath)
     }
 
@@ -33,15 +35,15 @@ class FirebaseDB @AssistedInject constructor(
         listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 before()
-                Log.d("***[", "onDataChange count=${snapshot.children.count()}")
+                Log.d(TAG, "onDataChange count=${snapshot.children.count()}")
                 for (data in snapshot.children) {
                     try {
                         val key: String = data.key ?: continue
                         val taskData: TaskData? = data.getValue<TaskData>()
-                        Log.d("***[", "onDataChange key=$key taskData=$taskData")
+                        Log.d(TAG, "onDataChange key=$key taskData=$taskData")
                         add(key, taskData!!)
                     } catch (e: Exception) {
-                        Log.e("***[", "onDataChange error and remove ${e.message} children=$data")
+                        Log.e(TAG, "onDataChange error and remove ${e.message} children=$data")
                         dbRef.child(data.key!!).removeValue()
                     }
                 }
@@ -61,7 +63,7 @@ class FirebaseDB @AssistedInject constructor(
 
     suspend fun add(taskData: TaskData): String? {
         dbRef.push().apply {
-            Log.d("***[", "add taskData=$taskData")
+            Log.d(TAG, "add taskData=$taskData")
             return suspendCoroutine { continuation ->
                 setValue(taskData) { error, _ ->
                     continuation.resume(

@@ -24,6 +24,8 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineExceptionHandler
 import javax.inject.Named
 
+const val TAG = "mScheduler"
+
 @HiltAndroidApp
 class BaseApplication: Application() {
 }
@@ -38,24 +40,14 @@ abstract class AppModule {
 
 @InstallIn(SingletonComponent::class)
 @Module
-object RetainedModuleObject {
+object SingletonModuleObject {
     @Provides
     @Named("AlarmClass")
     fun provideAlarmClass(): Class<*> = AlarmService::class.java
-}
 
-@InstallIn(ActivityRetainedComponent::class)
-@Module
-abstract class RetainedModule {
-
-}
-
-@InstallIn(ViewModelComponent::class)
-@Module
-class ViewModelModule {
     @Provides
     fun provideExceptionHandler(@ApplicationContext context: Context) = CoroutineExceptionHandler { _, throwable ->
-        Log.e("***[", "Error $throwable")
+        Log.e(TAG, "Error $throwable")
         Toast.makeText(context, "Error ${throwable.message}", Toast.LENGTH_LONG).show()
     }
 }

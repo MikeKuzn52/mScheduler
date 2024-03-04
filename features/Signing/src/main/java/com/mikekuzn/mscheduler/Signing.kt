@@ -54,11 +54,11 @@ class Signing @Inject constructor(
             firebaseAuth
                 .createUserWithEmailAndPassword(email, pass)
                 .addOnCompleteListener {
-                    Log.d("***[", "signUp $it")
+                    Log.d(TAG, "signUp $it")
                     messageOrState = context.getString(R.string.signUpSuccessful)
                 }
                 .addOnFailureListener {
-                    Log.d("***[", "signUp Failure $it")
+                    Log.d(TAG, "signUp Failure $it")
                     messageOrState = context.getString(R.string.signUpError) + " " + it.message
                 }
         }
@@ -70,12 +70,12 @@ class Signing @Inject constructor(
                 .signInWithEmailAndPassword(email, pass)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        Log.d("***[", "signIn $it")
+                        Log.d(TAG, "signIn $it")
                         messageOrState = context.getString(R.string.signInSuccessful)
                     }
                 }
                 .addOnFailureListener {
-                    Log.d("***[", "signIn Failure $it")
+                    Log.d(TAG, "signIn Failure $it")
                     messageOrState = context.getString(R.string.signInError) + " " + it.message
                 }
         }
@@ -90,7 +90,7 @@ class Signing @Inject constructor(
         val oldState = signed && isEmailVerified
         signed = currentUser != null
         isEmailVerified = currentUser?.isEmailVerified ?: false
-        Log.d("***[", "readState $currentUser $isEmailVerified")
+        Log.d(TAG, "readState $currentUser $isEmailVerified")
         if (!oldState && signed && isEmailVerified) {
             val addString = currentUser!!.uid
             useCases.setUserPath(addString)
@@ -98,7 +98,7 @@ class Signing @Inject constructor(
     }
 
     override fun signOut() {
-        Log.d("***[", "signOut")
+        Log.d(TAG, "signOut")
         useCases.clrUserPath()
         firebaseAuth.signOut()
     }

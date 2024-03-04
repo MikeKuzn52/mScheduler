@@ -45,6 +45,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
+const val TAG = "mScheduler"
+
 @AndroidEntryPoint
 class AlarmActivity : ComponentActivity() {
     @Inject
@@ -62,8 +64,9 @@ class AlarmActivity : ComponentActivity() {
         soundTask.stop()
         // TODO("Move string constants to separate file")
         val actionTime = intent?.extras?.getLong("ACTION_TIME")
-        Log.d("***[", "AlarmActivity onCreate actionTime=$actionTime ${intent?.extras}")
+        Log.d(TAG, "AlarmActivity onCreate actionTime=$actionTime ${intent?.extras}")
         taskList = alarmUseCases.getByTime(actionTime)
+        alarmUseCases.setNextAlarm()
         setContent {
             MSchedulerTheme {
                 // A surface container using the 'background' color from the theme
@@ -84,11 +87,11 @@ class AlarmActivity : ComponentActivity() {
 
     private fun getNextTask() =
         if (++taskIndex >= taskList.size) {
-            Log.d("***[", "AlarmActivity no more events")
+            Log.d(TAG, "AlarmActivity no more events")
             finish()
             false
         } else {
-            Log.d("***[", "AlarmActivity NextTask $taskIndex")
+            Log.d(TAG, "AlarmActivity NextTask $taskIndex")
             currentTask.value = taskList[taskIndex]
             true
         }

@@ -24,7 +24,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Provider
 
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
@@ -73,7 +72,7 @@ class MainActivity : ComponentActivity() {
             ActivityResultContracts.RequestMultiplePermissions()
         ) { result ->
             result.entries.forEach {
-                Log.d("***[", "${it.key} = ${it.value}")
+                Log.d(TAG, "${it.key} = ${it.value}")
             }
         }
             .launch(permissions)

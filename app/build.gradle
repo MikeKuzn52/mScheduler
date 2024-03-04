@@ -69,6 +69,7 @@ dependencies {
     implementation libs.androidx.room.ktx
     implementation platform(libs.compose.bom)
     implementation libs.androidx.constraintlayout.compose
+    implementation project(':features:wakeup')
     testImplementation libs.junit
     androidTestImplementation libs.androidx.test.ext.junit
     androidTestImplementation libs.espresso.core

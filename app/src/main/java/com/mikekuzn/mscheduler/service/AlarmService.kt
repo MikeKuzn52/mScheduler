@@ -14,6 +14,7 @@ import com.mikekuzn.resource.R
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+const val TAG = "mScheduler"
 const val ACTION = "_Action_"
 
 enum class Action { Finish, Postpone, Close }
@@ -44,21 +45,21 @@ class AlarmService : Service() {
             stopService()
             //when (actionString) {
             //    Action.Finish.name -> {
-            //        Log.d("***[", "AlarmService. Finish command")
+            //        Log.d(TAG, "AlarmService. Finish command")
             //        foregroundHelper.stopForegroundService()
             //    }
             //    Action.Close.name -> {
-            //        Log.d("***[", "AlarmService. Close command")
+            //        Log.d(TAG, "AlarmService. Close command")
             //        foregroundHelper.stopForegroundService()
             //    }
-            //    else -> Log.e("***[", "AlarmService. Unknown command=$actionString")
+            //    else -> Log.e(TAG, "AlarmService. Unknown command=$actionString")
             //}
         } else if (extras != null) {
             // TODO("Move string constants to separate file")
             val time = extras.getLong("TIME") ?: null
             val defTitle = getString(R.string.defaultNotification)
             val title = extras.getString("TITLE", defTitle)
-            Log.d("***[", "AlarmService start time=$time title=$title")
+            Log.d(TAG, "AlarmService start time=$time title=$title")
             if (time == null) {
                 stopService()
             } else {
@@ -66,7 +67,7 @@ class AlarmService : Service() {
                 return START_REDELIVER_INTENT
             }
         } else {
-            Log.e("***[", "AlarmService. Unknown intent=$intent")
+            Log.e(TAG, "AlarmService. Unknown intent=$intent")
             stopService()
 
         }
@@ -81,7 +82,7 @@ class AlarmService : Service() {
     private fun foregroundServiceLogic(actionTime: Long, title: String) {
         val currentTime = System.currentTimeMillis()
         if (actionTime in (currentTime - 2 * 60 - 1000)..(currentTime + 2 * 60 - 1000)) {
-            Log.d("***[", "AlarmService. Incorrect time=$actionTime current=$currentTime")
+            Log.d(TAG, "AlarmService. Incorrect time=$actionTime current=$currentTime")
             stopService()
             return
         }

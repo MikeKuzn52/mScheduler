@@ -52,7 +52,7 @@ class SwipeListState(
     }
 
     fun onSwipeEnd() {
-        Log.d("***[", "onSwipeEnd index=${index.value} swipeState=$swipeState")
+        Log.d(TAG, "onSwipeEnd index=${index.value} swipeState=$swipeState")
         index.value?.let {
             when (swipeState) {
                 SwipeState.NO_SWIPED -> {}

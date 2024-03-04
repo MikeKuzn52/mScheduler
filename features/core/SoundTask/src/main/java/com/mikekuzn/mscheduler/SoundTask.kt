@@ -9,6 +9,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+const val TAG = "mScheduler"
+
 @Singleton // to save last "ringtone" object
 class SoundTask @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -17,7 +19,7 @@ class SoundTask @Inject constructor(
     private var ringtone: Ringtone? = null
 
     override fun execute(task: Task) {
-        Log.d("***[", "SoundTask play ${task.title}")
+        Log.d(TAG, "SoundTask play ${task.title}")
         ringtone?.stop() // Stop old playing
         ringtone = if (task.isSystemMelody) {
             RingtoneManager.getRingtone(
@@ -34,7 +36,7 @@ class SoundTask @Inject constructor(
     }
 
     override fun stop() {
-        Log.d("***[", "SoundTask stop")
+        Log.d(TAG, "SoundTask stop")
         ringtone?.stop()
     }
 }

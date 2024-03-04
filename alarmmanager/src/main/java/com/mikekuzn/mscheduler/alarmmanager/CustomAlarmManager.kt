@@ -11,6 +11,8 @@ import java.text.SimpleDateFormat
 import javax.inject.Inject
 import javax.inject.Named
 
+const val TAG = "mScheduler"
+
 class CustomAlarmManager @Inject constructor(
     @ApplicationContext private val context: Context,
     @Named("AlarmClass") private val clazz: Class<*>,
@@ -30,7 +32,7 @@ class CustomAlarmManager @Inject constructor(
 
     @SuppressLint("ScheduleExactAlarm", "SimpleDateFormat")
     override fun writeAlarm(hashCode: Int, timeInMillis: Long, addData: ((intent: Intent) -> Unit)?) {
-        Log.d("***[", "writeAlarm ${SimpleDateFormat("yy.MM.dd HH:mm").format(timeInMillis)}")
+        Log.d(TAG, "writeAlarm ${SimpleDateFormat("yy.MM.dd HH:mm").format(timeInMillis)}")
         val pendingIntent = getPendingIntent(hashCode, addData)
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
     }

@@ -8,8 +8,10 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.mikekuzn.mscheduler.entities.Task
 import javax.inject.Inject
 
+const val TAG = "mScheduler"
+
 class UseCases @Inject constructor(
-    private val taskList: TaskList,
+    taskList: TaskList,
     private val repository: RepositoryInter,
     private val alarmUpdater: AlarmUseCasesUpdateInter,
 ) : UseCasesInter {
@@ -19,7 +21,7 @@ class UseCases @Inject constructor(
     private var taskListM = taskList.getTaskList()
 
     override fun setUserPath(userPath: String) {
-        Log.d("***[", "setUserPath $userPath")
+        Log.d(TAG, "setUserPath $userPath")
         if (savedUserPath != userPath) {
             savedUserPath?.run { throw Exception("Internal error. Add UserPath") }
             savedUserPath = userPath
@@ -68,7 +70,7 @@ class UseCases @Inject constructor(
         // if newTask.key == null it is local task
         newTask.key ?: let {
             val newKey = repository.add(newTask)
-            Log.d("***[", "addTask key=${newTask.key}->$newKey")
+            Log.d(TAG, "addTask key=${newTask.key}->$newKey")
             newTask.key = newKey
             if (newKey.isNullOrEmpty()) {
                 // TODO newKey == null -> Toast or anything also and repeat to write
@@ -94,7 +96,7 @@ class UseCases @Inject constructor(
 
     override suspend fun modifyTask(index: Int) {
         if (taskListM[index].key.isNullOrEmpty()) {
-            Log.e("***[", "modifyTask N$index key='${taskListM[index].key}")
+            Log.e(TAG, "modifyTask N$index key='${taskListM[index].key}")
             // TODO Toast or anything also
             return
         }

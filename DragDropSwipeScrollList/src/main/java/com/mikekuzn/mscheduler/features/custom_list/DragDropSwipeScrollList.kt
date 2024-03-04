@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Job
 
+const val TAG = "mScheduler"
+
 @Composable
 fun <T> DragDropSwipeScrollList(
     mItems: List<T>,

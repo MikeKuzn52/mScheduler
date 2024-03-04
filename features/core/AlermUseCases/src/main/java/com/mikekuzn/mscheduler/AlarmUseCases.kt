@@ -1,7 +1,6 @@
 package com.mikekuzn.mscheduler
 
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.util.Log
 import com.mikekuzn.mscheduler.alarmmanager.CustomAlarmManagerInter
 import com.mikekuzn.mscheduler.entities.Task
@@ -10,6 +9,7 @@ import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.min
 
+const val TAG = "mScheduler"
 
 class AlarmUseCases @Inject constructor(
     private val taskList: TaskList,
@@ -25,7 +25,7 @@ class AlarmUseCases @Inject constructor(
         val resultTaskList = mutableListOf<Task>()
         for (task in taskList.getTaskList()) {
             task.timeForeach {
-                Log.d("***[", "getByTime $it =?= $time")
+                Log.d(TAG, "getByTime $it =?= $time")
                 if (it == time) {
                     resultTaskList.add(task)
                 }
@@ -42,8 +42,7 @@ class AlarmUseCases @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun setNextAlarm(): Boolean {
-        Log.d("***[", "setNextAlarm taskList.size=${taskList.getTaskList().size}")
+    override fun setNextAlarm() {
         val currentTime = System.currentTimeMillis()
         var newNext: Pair<Task?, Long> = null to Long.MAX_VALUE
         for (task in taskList.getTaskList()) {
@@ -52,8 +51,10 @@ class AlarmUseCases @Inject constructor(
                 newNext = task to time
             }
         }
-        newNext.first?.let { setNext(it, newNext.second) }
-        return taskList.getTaskList().size != 0 // TODO("size != 0 -> isInit")
+        Log.d(TAG, "setNextAlarm ${newNext.first}")
+        newNext.first?.let {
+            setNext(it, newNext.second)
+        }
     }
 
     override fun updateForTask(task: Task) {
