@@ -3,6 +3,7 @@ package com.mikekuzn.mscheduler.alarmmanager
 import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -24,7 +25,10 @@ class CustomAlarmManager @Inject constructor(
 
     private fun getPendingIntent(hashCode: Int, addData: ((intent: Intent) -> Unit)? = null) = PendingIntent.getService(
         context, hashCode,
-        Intent(context, clazz).apply {
+        Intent().apply {
+            setComponent(
+                ComponentName(context.packageName, clazz.name)
+            )
             addData?.invoke(this)
         },
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE

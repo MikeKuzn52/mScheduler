@@ -56,7 +56,7 @@ class AlarmService : Service() {
             //}
         } else if (extras != null) {
             // TODO("Move string constants to separate file")
-            val time = extras.getLong("TIME") ?: null
+            val time = extras.getLong("TIME") as Long?
             val defTitle = getString(R.string.defaultNotification)
             val title = extras.getString("TITLE", defTitle)
             Log.d(TAG, "AlarmService start time=$time title=$title")

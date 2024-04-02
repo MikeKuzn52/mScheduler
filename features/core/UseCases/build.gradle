@@ -45,4 +45,6 @@ dependencies {
     // Modules
     implementation project(':features:core:TaskListEntity')
     implementation project(':features:core:TaskListEntityApi')
+    implementation project(':features:core:Data')
+    implementation project(':features:core:AlermUseCases')
 }

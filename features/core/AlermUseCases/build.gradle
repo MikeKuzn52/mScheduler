@@ -45,5 +45,4 @@ dependencies {
     implementation project(':features:core:TaskListEntity')
     implementation project(':features:core:TaskListEntityApi')
     implementation project(':alarmmanager')
-    implementation project(':features:core:UseCases') // for AlarmUseCasesUpdateInter
 }

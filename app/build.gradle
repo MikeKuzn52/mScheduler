@@ -88,7 +88,6 @@ dependencies {
     // Modules
     implementation project(':features:core:TaskListEntityApi')
     implementation project(':features:core:AlermUseCases')
-    implementation project(':features:core:Data') // only for file Di.kt
     implementation project(':features:core:SoundTask')
     implementation project(':features:Signing')
     implementation project(':features:TaskList')
