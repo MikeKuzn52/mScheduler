@@ -38,7 +38,7 @@ class CustomAlarmManager @Inject constructor(
     override fun writeAlarm(hashCode: Int, timeInMillis: Long, addData: ((intent: Intent) -> Unit)?) {
         Log.d(TAG, "writeAlarm ${SimpleDateFormat("yy.MM.dd HH:mm").format(timeInMillis)}")
         val pendingIntent = getPendingIntent(hashCode, addData)
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
     }
 
     override fun cancelAlarm(hashCode: Int) {
